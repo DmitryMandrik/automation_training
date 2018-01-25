@@ -17,7 +17,7 @@ class JsonParserTest {
     private static final double SOFT_PRICE = 99.0;
     private Cart cart;
     private JsonParser parser;
-    private List<String> cartList = new ArrayList<>();
+    private List<String> cartFilesList = new ArrayList<>();
 
     private Cart addItemsToCartTest() {
 
@@ -83,14 +83,15 @@ class JsonParserTest {
             String str;
 
             while ((str = in.readLine()) != null) {
-                cartList.add(str);
+                cartFilesList.add(str);
             }
             in.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        File file = Paths.get(cartFilesList.get((new Random()).nextInt(cartFilesList.size()))).toFile();
         try {
-            new JsonParser().readFromFile(Paths.get(cartList.get((new Random()).nextInt(cartList.size()))).toFile());
+            new JsonParser().readFromFile(file);
         } catch (NoSuchFileException e) {
             e.printStackTrace();
         }
