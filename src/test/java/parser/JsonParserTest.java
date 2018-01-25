@@ -8,8 +8,11 @@ import shop.Cart;
 import shop.RealItem;
 import shop.VirtualItem;
 
-import java.io.File;
+import java.io.*;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 class JsonParserTest {
 
@@ -17,9 +20,9 @@ class JsonParserTest {
     private static final double SOFT_PRICE = 99.0;
     private Cart cart;
     private JsonParser parser;
+    private List<String> cartList = new ArrayList<>();
 
-
-    Cart addItemsToCartTest() {
+    private Cart addItemsToCartTest() {
 
         RealItem rItem = new RealItem();
         rItem.setName("Book");
@@ -64,10 +67,32 @@ class JsonParserTest {
     void validateCorrectRealItemWrittenToFileTest() {
         Cart johnCart = parser.readFromFile(new File("src/main/resources/john-cart.json"));
         List<RealItem> expectedResultName = cart.getRealItems();
-        List<RealItem>  actualResultName = johnCart.getRealItems();
+        List<RealItem> actualResultName = johnCart.getRealItems();
         Assertions.assertEquals(expectedResultName.get(0).getWeight(), actualResultName.get(0).getWeight());
         Assertions.assertEquals(expectedResultName.get(0).getPrice(), actualResultName.get(0).getPrice());
         Assertions.assertEquals(expectedResultName.get(0).getName(), actualResultName.get(0).getName());
+    }
+
+    @Test
+    void readFromFileTest() {
+        BufferedReader in;
+
+        try {
+            in = new BufferedReader(new FileReader("src/test/datasets/carts.txt"));
+            String str;
+
+            while ((str = in.readLine()) != null) {
+                cartList.add(str);
+            }
+            in.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            new JsonParser().readFromFile(Paths.get(cartList.get((new Random()).nextInt(cartList.size()))).toFile());
+        } catch (NoSuchFileException e) {
+            e.printStackTrace();
+        }
     }
 
     @AfterEach
