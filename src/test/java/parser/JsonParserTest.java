@@ -1,9 +1,6 @@
 package parser;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import shop.Cart;
 import shop.RealItem;
 import shop.VirtualItem;
@@ -47,33 +44,37 @@ class JsonParserTest {
         parser.writeToFile(cart);
     }
 
-    @Test
-    void validateCorrectCartNameWrittenToFileTest() {
-        Cart johnCart = parser.readFromFile(new File("src/main/resources/john-cart.json"));
-        String expectedResultName = cart.getCartName();
-        String actualResultName = johnCart.getCartName();
-        Assertions.assertEquals(expectedResultName, actualResultName);
+    @Nested
+    class Suite1 {
+        @Test
+        void validateCorrectCartNameWrittenToFileTest() {
+            Cart johnCart = parser.readFromFile(new File("src/main/resources/john-cart.json"));
+            String expectedResultName = cart.getCartName();
+            String actualResultName = johnCart.getCartName();
+            Assertions.assertEquals(expectedResultName, actualResultName);
+        }
+
+        @Test
+        void validateCorrectCartPriceWrittenToFileTest() {
+            Cart johnCart = parser.readFromFile(new File("src/main/resources/john-cart.json"));
+            double expectedResultName = cart.getTotalPrice();
+            double actualResultName = johnCart.getTotalPrice();
+            Assertions.assertEquals(expectedResultName, actualResultName);
+        }
+
+        @Test
+        void validateCorrectRealItemWrittenToFileTest() {
+            Cart johnCart = parser.readFromFile(new File("src/main/resources/john-cart.json"));
+            List<RealItem> expectedResultName = cart.getRealItems();
+            List<RealItem> actualResultName = johnCart.getRealItems();
+            Assertions.assertEquals(expectedResultName.get(0).getWeight(), actualResultName.get(0).getWeight());
+            Assertions.assertEquals(expectedResultName.get(0).getPrice(), actualResultName.get(0).getPrice());
+            Assertions.assertEquals(expectedResultName.get(0).getName(), actualResultName.get(0).getName());
+        }
     }
 
     @Test
-    void validateCorrectCartPriceWrittenToFileTest() {
-        Cart johnCart = parser.readFromFile(new File("src/main/resources/john-cart.json"));
-        double expectedResultName = cart.getTotalPrice();
-        double actualResultName = johnCart.getTotalPrice();
-        Assertions.assertEquals(expectedResultName, actualResultName);
-    }
-
-    @Test
-    void validateCorrectRealItemWrittenToFileTest() {
-        Cart johnCart = parser.readFromFile(new File("src/main/resources/john-cart.json"));
-        List<RealItem> expectedResultName = cart.getRealItems();
-        List<RealItem> actualResultName = johnCart.getRealItems();
-        Assertions.assertEquals(expectedResultName.get(0).getWeight(), actualResultName.get(0).getWeight());
-        Assertions.assertEquals(expectedResultName.get(0).getPrice(), actualResultName.get(0).getPrice());
-        Assertions.assertEquals(expectedResultName.get(0).getName(), actualResultName.get(0).getName());
-    }
-
-    @Test
+    @DisplayName("JSON TEST - EXCEPTION")
     void readFromFileTest() {
         BufferedReader in;
 
@@ -99,5 +100,4 @@ class JsonParserTest {
     void cleanCart() {
         cart.clearCart();
     }
-
 }

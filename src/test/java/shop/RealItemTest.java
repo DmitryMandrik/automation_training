@@ -16,6 +16,5 @@ class RealItemTest {
 
         String actualResult = realItem.toString();
         Assertions.assertEquals(EXPECTED_TO_STRING_RESULT, actualResult);
-
     }
 }
