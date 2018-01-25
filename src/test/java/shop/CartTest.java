@@ -39,15 +39,4 @@ class CartTest {
     void cleanCart() {
         cart.clearCart();
     }
-
-//    @Test
-//    void verifyThatNoPriceExceptionThrowsTest() {
-//        RealItem item = new RealItem();
-//        item.setName("Book");
-//        item.setPrice(20);
-//
-//        Cart cart = new Cart("john-cart");
-//        Assertions.assertThrows(NoPriceException.class, () -> cart.addRealItem(item));
-//    }
 }
-

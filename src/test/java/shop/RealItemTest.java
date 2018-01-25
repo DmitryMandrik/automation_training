@@ -18,13 +18,4 @@ class RealItemTest {
         Assertions.assertEquals(EXPECTED_TO_STRING_RESULT, actualResult);
 
     }
-
-    @Test
-    void verifyThatGetWeightReturnsCorrectValueTest() {
-        RealItem realItem = new RealItem();
-        realItem.setWeight(WEIGHT);
-
-        Assertions.assertEquals(WEIGHT, realItem.getWeight());
-
-    }
 }

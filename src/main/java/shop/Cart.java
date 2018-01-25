@@ -30,10 +30,6 @@ public class Cart {
     }
 
     public void addRealItem(RealItem item) {
-//        if (total == 0) {
-//            NoPriceException a = new NoPriceException("Anything but zero ...");
-//            throw a;
-//        }
         realItems.add(item);
         total += item.getPrice() + item.getPrice() * TAX;
     }
