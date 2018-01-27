@@ -1,23 +1,43 @@
 package parser;
 
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import shop.Cart;
 import shop.RealItem;
 import shop.VirtualItem;
 
 import java.io.*;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 class JsonParserTest {
 
     private static final double BOOK_PRICE = 25.2;
     private static final double SOFT_PRICE = 99.0;
+    private static final String PATH_TO_CART_LIST = "src/test/datasets/carts.txt";
     private Cart cart;
     private JsonParser parser;
-    private List<String> cartFilesList = new ArrayList<>();
+    private static List<String> cartFilesList;
+
+    private static List<String> setCartFilesList() {
+        BufferedReader in;
+        cartFilesList = new ArrayList<>();
+
+        try {
+            in = new BufferedReader(new FileReader(PATH_TO_CART_LIST));
+            String str;
+
+            while ((str = in.readLine()) != null) {
+                cartFilesList.add(str);
+            }
+            in.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return JsonParserTest.cartFilesList;
+    }
+
 
     private Cart addItemsToCartTest() {
 
@@ -42,6 +62,13 @@ class JsonParserTest {
         this.cart = addItemsToCartTest();
         this.parser = new JsonParser();
         parser.writeToFile(cart);
+    }
+
+    @DisplayName("JSON TEST - EXCEPTION")
+    @ParameterizedTest
+    @MethodSource("setCartFilesList")
+    void readFromFileTest(String file) {
+        Assertions.assertThrows(NoSuchFileException.class, () -> parser.readFromFile(new File(file)));
     }
 
     @Nested
@@ -70,30 +97,6 @@ class JsonParserTest {
             Assertions.assertEquals(expectedResultName.get(0).getWeight(), actualResultName.get(0).getWeight());
             Assertions.assertEquals(expectedResultName.get(0).getPrice(), actualResultName.get(0).getPrice());
             Assertions.assertEquals(expectedResultName.get(0).getName(), actualResultName.get(0).getName());
-        }
-    }
-
-    @Test
-    @DisplayName("JSON TEST - EXCEPTION")
-    void readFromFileTest() {
-        BufferedReader in;
-
-        try {
-            in = new BufferedReader(new FileReader("src/test/datasets/carts.txt"));
-            String str;
-
-            while ((str = in.readLine()) != null) {
-                cartFilesList.add(str);
-            }
-            in.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        File file = Paths.get(cartFilesList.get((new Random()).nextInt(cartFilesList.size()))).toFile();
-        try {
-            new JsonParser().readFromFile(file);
-        } catch (NoSuchFileException e) {
-            e.printStackTrace();
         }
     }
 

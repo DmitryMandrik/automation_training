@@ -2,7 +2,6 @@ package shop;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.testng.annotations.BeforeTest;
 
 class VirtualItemTest {
 
